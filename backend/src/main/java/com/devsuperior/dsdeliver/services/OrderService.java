@@ -7,6 +7,7 @@ import com.devsuperior.dsdeliver.entities.OrderStatus;
 import com.devsuperior.dsdeliver.entities.Product;
 import com.devsuperior.dsdeliver.repositories.OrderRepository;
 import com.devsuperior.dsdeliver.repositories.ProductRepository;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,14 @@ public class OrderService {
             order.getProducts().add(product);
         }
 
+        order = repository.save(order);
+        return new OrderDTO(order);
+    }
+
+    @Transactional
+    public OrderDTO setDelivered(Long id) {
+        Order order = repository.getOne(id);
+        order.setStatus(OrderStatus.DELIVERED);
         order = repository.save(order);
         return new OrderDTO(order);
     }
